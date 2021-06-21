@@ -34,5 +34,5 @@ my MB is detected as IDE, with serial 0520B677C5505E43; if connected to
 the other controller, same ssd is detected as SCSI with serial 
 50026B775C05E534. Looks different, but in fact the bytes are reversed as
 if one time it's little endian, then the other time it's big endian.
-So I display them both, for your viewing pleasure :-))
+So HDID displays them both, for your viewing pleasure :-))
 
