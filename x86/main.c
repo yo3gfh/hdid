@@ -104,6 +104,7 @@ static INT_PTR CALLBACK MainDlgProc ( HWND hwndDlg, UINT uMsg,
                 MessageBoxW ( hwndDlg, L"Error while getting WMI data :-(", 
                     L"HDID", MB_OK );
 
+                EndDialog ( hwndDlg, FALSE );
                 return TRUE;
             }
 
