@@ -53,19 +53,19 @@ int APIENTRY wWinMain ( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
     /* Get system dialog information */
     wcx.cbSize = sizeof ( wcx );
-    if ( !GetClassInfoEx ( NULL, MAKEINTRESOURCE(32770), &wcx) )
+    if ( !GetClassInfoExW ( NULL, MAKEINTRESOURCE(32770), &wcx) )
         return 0;
 
     /* Add our own stuff */
     wcx.hInstance = hInstance;
-    wcx.hIcon = LoadIcon ( hInstance, MAKEINTRESOURCE(IDR_ICO_MAIN) );
+    wcx.hIcon = LoadIconW ( hInstance, MAKEINTRESOURCE(IDR_ICO_MAIN) );
     wcx.lpszClassName = L"hdidClass";
 
-    if ( !RegisterClassEx (&wcx) )
+    if ( !RegisterClassExW (&wcx) )
         return 0;
 
     /* The user interface is a modal dialog box */
-    return DialogBox ( hInstance, MAKEINTRESOURCE(DLG_MAIN), 
+    return DialogBoxW ( hInstance, MAKEINTRESOURCE(DLG_MAIN), 
         NULL, (DLGPROC)MainDlgProc );
 }
 
@@ -100,14 +100,14 @@ static INT_PTR CALLBACK MainDlgProc ( HWND hwndDlg, UINT uMsg,
             return FALSE;
             
         case WM_COMMAND:
-            switch (GET_WM_COMMAND_ID(wParam, lParam))
+            switch ( GET_WM_COMMAND_ID(wParam, lParam) )
             {
                 case IDOK:
-                    EndDialog(hwndDlg, TRUE);
+                    EndDialog ( hwndDlg, TRUE );
                     return TRUE;
 
                 case IDCANCEL:
-                    EndDialog(hwndDlg, FALSE);
+                    EndDialog ( hwndDlg, FALSE );
                     return TRUE;
 
                 case IDC_REFRESH:
