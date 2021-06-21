@@ -53,6 +53,7 @@ int APIENTRY wWinMain ( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
     /* Get system dialog information */
     wcx.cbSize = sizeof ( wcx );
+
     if ( !GetClassInfoExW ( NULL, MAKEINTRESOURCE(32770), &wcx) )
         return 0;
 
@@ -92,11 +93,24 @@ static INT_PTR CALLBACK MainDlgProc ( HWND hwndDlg, UINT uMsg,
         case WM_INITDIALOG:
             ghEd = GetDlgItem ( hwndDlg, IDC_ED );
             SendMessage ( ghEd, WM_SETTEXT, (WPARAM)0, (LPARAM)L"" );
-            WMIGetCPUInfo ( GetDlgItem ( hwndDlg, IDC_CPU ) );
-            WMIGetStorageInfo ( ghEd );
+
+            __try
+            {
+                WMIGetCPUInfo ( GetDlgItem ( hwndDlg, IDC_CPU ) );
+                WMIGetStorageInfo ( ghEd );
+            }
+            __except (EXCEPTION_EXECUTE_HANDLER)
+            {
+                MessageBoxW ( hwndDlg, L"Error while getting WMI data :-(", 
+                    L"HDID", MB_OK );
+
+                return TRUE;
+            }
+
             SendMessage ( ghEd, EM_SETSEL, (WPARAM)0, (LPARAM)0 );
             SendMessage ( ghEd, EM_SCROLLCARET, (WPARAM)0, (LPARAM)0 );
             SetFocus ( ghEd );
+
             return FALSE;
             
         case WM_COMMAND:
@@ -104,28 +118,48 @@ static INT_PTR CALLBACK MainDlgProc ( HWND hwndDlg, UINT uMsg,
             {
                 case IDOK:
                     EndDialog ( hwndDlg, TRUE );
+
                     return TRUE;
 
                 case IDCANCEL:
                     EndDialog ( hwndDlg, FALSE );
+
                     return TRUE;
 
                 case IDC_REFRESH:
                     // disable redraw for the update duration
                     BeginDraw ( ghEd );
                     SendMessage ( ghEd, WM_SETTEXT, 0, (LPARAM)L"" );
-                    WMIGetStorageInfo ( ghEd );
-                    SendMessage ( ghEd, EM_SETSEL, (WPARAM)0, (LPARAM)0 );
-                    SendMessage ( ghEd, EM_SCROLLCARET, (WPARAM)0, (LPARAM)0 );
+
+                    __try
+                    {
+                        WMIGetStorageInfo ( ghEd );
+                    }
+                    __except (EXCEPTION_EXECUTE_HANDLER)
+                    {
+                        MessageBoxW ( hwndDlg, 
+                            L"Error while getting WMI data :-(", 
+                            L"HDID", MB_OK );
+
+                        EndDraw ( ghEd );
+                        return TRUE;
+                    }
+
+                    SendMessage ( ghEd, EM_SETSEL, (WPARAM)0, 
+                        (LPARAM)0 );
+                    SendMessage ( ghEd, EM_SCROLLCARET, (WPARAM)0, 
+                        (LPARAM)0 );
                     // re-enable draw and force a repaint
                     EndDraw ( ghEd );
                     SetFocus ( ghEd );
+
                     return TRUE;
             }
             break;
 
         case WM_CLOSE:
             EndDialog ( hwndDlg, 0 );
+
             return TRUE;
     }
 

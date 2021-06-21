@@ -4,6 +4,10 @@
 
 #define UNICODE
 
+#ifndef UNICODE
+    #error "You need to define UNICODE for this app to compile correctly"
+#endif
+
 #define DLG_MAIN        1001
 #define IDC_REFRESH     4001
 #define IDC_ED          4007
