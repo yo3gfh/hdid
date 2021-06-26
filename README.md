@@ -37,4 +37,9 @@ if one time it's little endian, then the other time it's big endian.
 So HDID displays them both, for your viewing pleasure :-)) And if it
 wasn't enough, sometimes thre reported SN is displayed as hex bytes...
 HDID tries to display that as well, when applicable.
+* it does not work on Win XP/2003 server - Win32_DiskDrive does not have 
+the SerialNumber field on these OS-s. If you really have to make it run
+on them, first make a WMI interogation against Win32_PhysicalDrive (which 
+has the SerialNumber member), then run another one on Win32_DiskDrive
+with all the members minus SerialNumber, so that it won't fail.
 
