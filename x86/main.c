@@ -8,8 +8,6 @@
 #include <commctrl.h>
 #include <wchar.h>
 
-#define NELEMS(a)  (sizeof(a) / sizeof((a)[0]))
-
 /** Prototypes **************************************************************/
 
 static INT_PTR CALLBACK MainDlgProc ( HWND, UINT, WPARAM, LPARAM );
